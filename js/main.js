@@ -11,8 +11,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added
   fetchNeighborhoods();
   fetchCuisines();
+  registerServiceWorker();
   console.log('Map added');
 });
+
+/**
+ * checks to see if the service worker API is available, and if it is,
+ * the service worker at ../sw.js is registered once the page is loaded.
+ */
+function registerServiceWorker(){
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('../sw.js').then(function(registration) {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, function(err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
+}
 
 /**
  * Fetch all neighborhoods and set their HTML.
